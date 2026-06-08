@@ -33,7 +33,7 @@ export function FilterRail({
 }) {
   const { t } = useI18n();
   return (
-    <div className="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur-xl">
+    <div className="sticky top-0 z-30 border-b border-border glass-strong">
       <div className="flex gap-1.5 px-3 pb-2 pt-2">
         {TABS.map((tb) => {
           const active = tab === tb;
@@ -45,10 +45,10 @@ export function FilterRail({
                 setTab(tb);
               }}
               aria-pressed={active}
-              className={`flex-1 rounded-xl px-2 py-2 text-sm font-bold transition-all active:scale-95 ${
+              className={`relative flex-1 overflow-hidden rounded-xl px-2 py-2.5 text-sm font-bold transition-all duration-300 active:scale-95 ${
                 active
-                  ? "bg-gradient-cta text-primary-foreground shadow-card glow-lime"
-                  : "bg-card/60 text-muted-foreground"
+                  ? "bg-gradient-cta text-primary-foreground shadow-card glow-lime scale-[1.03]"
+                  : "bg-card/50 text-muted-foreground hover:bg-card/80 hover:text-foreground"
               }`}
             >
               <span className="mr-1">{TAB_ICON[tb]}</span>
@@ -58,7 +58,7 @@ export function FilterRail({
         })}
       </div>
       {tab === "news" && (
-        <div className="no-scrollbar flex gap-1.5 overflow-x-auto px-3 pb-2">
+        <div className="no-scrollbar animate-rise flex gap-1.5 overflow-x-auto px-3 pb-2">
           {SUBCHIPS.map((c) => {
             const active = category === c.key;
             return (
@@ -69,10 +69,10 @@ export function FilterRail({
                   setCategory(c.key);
                 }}
                 aria-pressed={active}
-                className={`shrink-0 rounded-full border px-3 py-1 text-xs font-semibold transition-colors ${
+                className={`shrink-0 rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-all active:scale-95 ${
                   active
-                    ? "border-primary bg-primary/15 text-primary"
-                    : "border-border bg-card/40 text-muted-foreground"
+                    ? "border-primary/60 bg-primary/15 text-primary glow-lime"
+                    : "border-border bg-card/40 text-muted-foreground hover:border-primary/30 hover:text-foreground"
                 }`}
               >
                 {t(c.label)}
