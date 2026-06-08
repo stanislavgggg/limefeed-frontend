@@ -3,6 +3,8 @@ import { useI18n } from "@/lib/i18n";
 import { haptic } from "@/lib/telegram";
 import { postEvent } from "@/lib/funnel";
 import { LimeMark } from "../Mascot";
+import { StageBackdrop } from "../StageBackdrop";
+import stageLocked from "@/assets/stage-locked.jpg";
 
 export function LockedCard({ teaser, onUnlock }: { teaser?: string; onUnlock: () => void }) {
   const { t } = useI18n();
@@ -22,6 +24,11 @@ export function LockedCard({ teaser, onUnlock }: { teaser?: string; onUnlock: ()
 
   return (
     <article className="animate-rise ring-gradient relative overflow-hidden rounded-2xl border border-primary/30 glass p-4 shadow-card">
+      <StageBackdrop
+        src={stageLocked}
+        imgClassName="opacity-20 blur-[2px]"
+        overlayClassName="bg-gradient-to-b from-background/50 via-background/40 to-background/80"
+      />
       <div className="bg-aurora pointer-events-none absolute inset-0 opacity-40" />
       {teaser && (
         <p className="relative select-none text-[15px] font-bold leading-snug text-foreground/80 blur-[7px]">

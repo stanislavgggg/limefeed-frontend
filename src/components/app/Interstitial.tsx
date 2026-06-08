@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { useI18n } from "@/lib/i18n";
 import { postEvent } from "@/lib/funnel";
 import { LimoAvatar } from "./Mascot";
+import { StageBackdrop } from "./StageBackdrop";
+import stageInterstitial from "@/assets/stage-interstitial.jpg";
 
 export function Interstitial({
   label,
@@ -24,7 +26,8 @@ export function Interstitial({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/90 px-6 backdrop-blur-md">
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-background/90 px-6 py-8 backdrop-blur-md">
+      <StageBackdrop src={stageInterstitial} imgClassName="opacity-30 blur-[3px]" />
       <div className="bg-aurora pointer-events-none absolute inset-0" />
       <div className="animate-rise relative w-full max-w-sm text-center">
         <LimoAvatar className="mx-auto h-28 w-28" />
