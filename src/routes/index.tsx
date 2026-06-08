@@ -223,47 +223,93 @@ function Index() {
     if (subscribe) handleOpenChannel("onboarding");
   };
 
+  const pinnedMatch = liveMatches[0] ?? upcomingMatches[0];
+  const pinnedIsLive = liveMatches.length > 0;
+
   return (
     <div className="relative mx-auto min-h-screen max-w-[480px] pb-28">
-      <Header displayName={branding.displayName} tagline={branding.tagline} />
-      <FilterRail tab={tab} setTab={setTab} category={category} setCategory={setCategory} />
-
-      <main className="space-y-3 px-3 pt-3">
-        {gated && tab !== "markets" && <ValueStrip />}
-
-        {(tab === "hot" || tab === "news") && market && tab === "hot" && (
-          <MarketStrip market={market} />
-        )}
-
-        {updatedAt && (
-          <p className="px-1 text-[11px] font-medium text-muted-foreground">
-            {t("updated")} {relativeTime(updatedAt, lang)}
-          </p>
-        )}
-
-        <TabContent
-          tab={tab}
-          category={category}
-          gated={gated}
-          news={news}
-          newsAll={newsAll}
-          live={live}
-          liveMatches={liveMatches}
-          upcomingMatches={upcomingMatches}
-          market={market}
-          onItemOpened={onItemOpened}
-          onUnlock={() => handleOpenChannel("feed_lock")}
-          onLiveCta={() => handleOpenChannel("live_match")}
+      {section === "channel" ? (
+        <ChannelScreen
+          displayName={branding.displayName}
+          channel={branding.channel}
+          onOpen={() => handleOpenChannel("channel_screen")}
         />
+      ) : (
+        <>
+          <Header displayName={branding.displayName} tagline={branding.tagline} />
+          {section === "feed" && (
+            <FilterRail tab={tab} setTab={setTab} category={category} setCategory={setCategory} />
+          )}
 
-        <Disclaimer className="pt-4" />
-      </main>
+          <main className="space-y-3 px-3 pt-3">
+            {gated && <ValueStrip />}
 
-      <Footer privacyUrl={branding.privacyUrl} />
+            {updatedAt && (
+              <p className="px-1 text-[11px] font-medium text-muted-foreground">
+                {t("updated")} {relativeTime(updatedAt, lang)}
+              </p>
+            )}
 
-      {gated && <SubscribeBar label={ctaLabel} onOpen={() => handleOpenChannel("sticky")} />}
+            {section === "feed" ? (
+              <>
+                {tab === "hot" && market && <MarketStrip market={market} />}
+                <TabContent
+                  tab={tab}
+                  category={category}
+                  gated={gated}
+                  news={news}
+                  newsAll={newsAll}
+                  liveMatches={liveMatches}
+                  market={market}
+                  onItemOpened={onItemOpened}
+                  onUnlock={() => handleOpenChannel("feed_lock")}
+                  onLockReached={() => setNewsLockReached(true)}
+                />
+              </>
+            ) : (
+              <LiveSection
+                live={live}
+                liveMatches={liveMatches}
+                upcomingMatches={upcomingMatches}
+                pinnedMatch={pinnedMatch}
+                pinnedIsLive={pinnedIsLive}
+                onPinnedCta={() => handleOpenChannel("live_pinned")}
+              />
+            )}
 
-      {gated && showInterstitial && (
+            <Disclaimer className="pt-4" />
+          </main>
+
+          <Footer privacyUrl={branding.privacyUrl} />
+        </>
+      )}
+
+      {/* Contextual sticky CTAs (sit above the bottom nav) */}
+      {gated && section === "feed" && newsLockReached && tab !== "markets" && (
+        <SubscribeBar
+          label={ctaLabel}
+          surface="feed_lock_sticky"
+          onOpen={() => handleOpenChannel("feed_lock_sticky")}
+        />
+      )}
+      {gated && section === "live" && liveStickyShown && (
+        <SubscribeBar
+          label={ctaLabel}
+          surface="live_sticky"
+          onOpen={() => handleOpenChannel("live_sticky")}
+        />
+      )}
+
+      <BottomNav
+        section={section}
+        onSelect={(s) => {
+          if (s === "channel") postEvent("cta_tap", { surface: "nav_channel_tab" });
+          setSection(s);
+          if (typeof window !== "undefined") window.scrollTo({ top: 0 });
+        }}
+      />
+
+      {section !== "channel" && gated && showInterstitial && (
         <Interstitial
           label={ctaLabel}
           onOpen={() => {
