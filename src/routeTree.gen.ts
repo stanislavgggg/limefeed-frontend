@@ -14,6 +14,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiUpcomingRouteImport } from './routes/api/upcoming'
 import { Route as ApiNewsRouteImport } from './routes/api/news'
+import { Route as ApiMembershipRouteImport } from './routes/api/membership'
 import { Route as ApiLiveRouteImport } from './routes/api/live'
 import { Route as ApiConfigRouteImport } from './routes/api/config'
 
@@ -42,6 +43,11 @@ const ApiNewsRoute = ApiNewsRouteImport.update({
   path: '/api/news',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiMembershipRoute = ApiMembershipRouteImport.update({
+  id: '/api/membership',
+  path: '/api/membership',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiLiveRoute = ApiLiveRouteImport.update({
   id: '/api/live',
   path: '/api/live',
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/config': typeof ApiConfigRoute
   '/api/live': typeof ApiLiveRoute
+  '/api/membership': typeof ApiMembershipRoute
   '/api/news': typeof ApiNewsRoute
   '/api/upcoming': typeof ApiUpcomingRoute
 }
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/config': typeof ApiConfigRoute
   '/api/live': typeof ApiLiveRoute
+  '/api/membership': typeof ApiMembershipRoute
   '/api/news': typeof ApiNewsRoute
   '/api/upcoming': typeof ApiUpcomingRoute
 }
@@ -78,6 +86,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/config': typeof ApiConfigRoute
   '/api/live': typeof ApiLiveRoute
+  '/api/membership': typeof ApiMembershipRoute
   '/api/news': typeof ApiNewsRoute
   '/api/upcoming': typeof ApiUpcomingRoute
 }
@@ -89,6 +98,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/api/config'
     | '/api/live'
+    | '/api/membership'
     | '/api/news'
     | '/api/upcoming'
   fileRoutesByTo: FileRoutesByTo
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/api/config'
     | '/api/live'
+    | '/api/membership'
     | '/api/news'
     | '/api/upcoming'
   id:
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/api/config'
     | '/api/live'
+    | '/api/membership'
     | '/api/news'
     | '/api/upcoming'
   fileRoutesById: FileRoutesById
@@ -117,6 +129,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ApiConfigRoute: typeof ApiConfigRoute
   ApiLiveRoute: typeof ApiLiveRoute
+  ApiMembershipRoute: typeof ApiMembershipRoute
   ApiNewsRoute: typeof ApiNewsRoute
   ApiUpcomingRoute: typeof ApiUpcomingRoute
 }
@@ -158,6 +171,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiNewsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/membership': {
+      id: '/api/membership'
+      path: '/api/membership'
+      fullPath: '/api/membership'
+      preLoaderRoute: typeof ApiMembershipRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/live': {
       id: '/api/live'
       path: '/api/live'
@@ -181,6 +201,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ApiConfigRoute: ApiConfigRoute,
   ApiLiveRoute: ApiLiveRoute,
+  ApiMembershipRoute: ApiMembershipRoute,
   ApiNewsRoute: ApiNewsRoute,
   ApiUpcomingRoute: ApiUpcomingRoute,
 }
