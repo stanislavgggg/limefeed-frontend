@@ -23,11 +23,11 @@ export function NewsCard({ item, index = 0 }: { item: NewsItem; index?: number }
   return (
     <article
       onClick={open}
-      className="animate-rise group cursor-pointer rounded-2xl border border-border bg-card/70 p-3.5 shadow-card transition-colors hover:border-primary/40"
+      className="animate-rise card-sheen group cursor-pointer rounded-2xl border border-border glass p-3.5 shadow-card transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-float active:scale-[0.99]"
       style={{ animationDelay: `${Math.min(index, 8) * 40}ms` }}
     >
       <div className="mb-2 flex items-center gap-2 text-[11px]">
-        <span className="rounded-md bg-primary/15 px-1.5 py-0.5 font-bold uppercase tracking-wide text-primary">
+        <span className="rounded-md bg-gradient-cta px-1.5 py-0.5 font-bold uppercase tracking-wide text-primary-foreground">
           {t(CAT_KEY[item.category])}
         </span>
         <span className="font-semibold text-muted-foreground">{item.source}</span>
@@ -35,7 +35,7 @@ export function NewsCard({ item, index = 0 }: { item: NewsItem; index?: number }
       </div>
       <div className="flex gap-3">
         <div className="min-w-0 flex-1">
-          <h3 className="font-display text-[15px] font-bold leading-snug text-foreground">
+          <h3 className="font-display text-[15px] font-bold leading-snug text-foreground transition-colors group-hover:text-primary">
             {item.title}
           </h3>
           {item.summary && (
@@ -45,13 +45,15 @@ export function NewsCard({ item, index = 0 }: { item: NewsItem; index?: number }
           )}
         </div>
         {imgOk && item.image && (
-          <img
-            src={item.image}
-            alt=""
-            loading="lazy"
-            onError={() => setImgOk(false)}
-            className="h-16 w-16 shrink-0 rounded-xl object-cover"
-          />
+          <div className="ring-gradient h-16 w-16 shrink-0 overflow-hidden rounded-xl">
+            <img
+              src={item.image}
+              alt=""
+              loading="lazy"
+              onError={() => setImgOk(false)}
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+            />
+          </div>
         )}
       </div>
     </article>
