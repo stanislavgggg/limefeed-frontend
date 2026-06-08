@@ -33,10 +33,15 @@ export function Footer({ privacyUrl }: { privacyUrl?: string }) {
 
 export function CardSkeleton() {
   return (
-    <div className="rounded-2xl border border-border bg-card/50 p-3.5">
-      <div className="mb-2 h-3 w-24 animate-pulse rounded bg-muted" />
-      <div className="h-4 w-3/4 animate-pulse rounded bg-muted" />
-      <div className="mt-2 h-3 w-1/2 animate-pulse rounded bg-muted" />
+    <div className="skeleton-shimmer rounded-2xl border border-border glass p-3.5">
+      <div className="mb-2.5 h-3 w-24 rounded bg-muted/60" />
+      <div className="flex gap-3">
+        <div className="min-w-0 flex-1 space-y-2">
+          <div className="h-4 w-3/4 rounded bg-muted/60" />
+          <div className="h-3 w-1/2 rounded bg-muted/50" />
+        </div>
+        <div className="h-16 w-16 shrink-0 rounded-xl bg-muted/50" />
+      </div>
     </div>
   );
 }
