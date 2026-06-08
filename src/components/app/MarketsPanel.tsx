@@ -79,7 +79,7 @@ export function MarketsPanel({ market }: { market: NewsMarket | undefined }) {
       </div>
 
       {market.coins?.length > 0 && (
-        <div className="overflow-hidden rounded-2xl border border-border bg-card/70 shadow-card">
+        <div className="overflow-hidden rounded-2xl border border-border glass shadow-card">
           <p className="border-b border-border px-4 py-2 text-xs font-bold uppercase tracking-wide text-muted-foreground">
             {t("market_coins")}
           </p>
