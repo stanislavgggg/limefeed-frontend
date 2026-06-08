@@ -12,7 +12,7 @@ export function Header({ displayName, tagline }: { displayName: string; tagline:
         <div className="flex min-w-0 items-center gap-2.5">
           <LimoAvatar className="animate-float h-11 w-11 shrink-0" />
           <div className="min-w-0 leading-tight">
-            <h1 className="text-gradient font-display text-[20px] font-extrabold leading-tight tracking-tight">
+            <h1 className="text-gradient truncate font-display text-[20px] font-extrabold leading-tight tracking-tight">
               {displayName}
             </h1>
             <div className="mt-0.5 flex items-center gap-1.5">
@@ -20,7 +20,7 @@ export function Header({ displayName, tagline }: { displayName: string; tagline:
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-up opacity-70" />
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-up" />
               </span>
-              <p className="text-[11px] font-medium text-muted-foreground">
+              <p className="truncate text-[11px] font-medium text-muted-foreground">
                 {tagline || t("tagline")}
               </p>
             </div>

@@ -22,8 +22,8 @@ export function Onboarding({
       <StageBackdrop src={stageOnboarding} imgClassName="opacity-30 blur-[3px]" />
       <div className="bg-aurora pointer-events-none absolute inset-0" />
       <div className="relative mx-auto flex min-h-full max-w-[480px] flex-col items-center justify-center gap-4 px-6 py-10 text-center">
-        <LimoAvatar className="h-32 w-32" />
-        <h1 className="text-gradient font-display text-2xl font-extrabold">{t("onb_title")}</h1>
+        <LimoAvatar className="h-24 w-24 sm:h-32 sm:w-32" />
+        <h1 className="text-gradient font-display text-xl font-extrabold sm:text-2xl">{t("onb_title")}</h1>
         <p className="max-w-xs text-sm text-muted-foreground">{t("onb_sub")}</p>
 
         <ul className="my-2 w-full space-y-2 text-left">
