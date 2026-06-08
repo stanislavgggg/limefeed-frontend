@@ -42,7 +42,7 @@ function Stat({ title, value, positive }: { title: string; value: string; positi
   const color =
     positive == null ? "text-foreground" : positive ? "text-up" : "text-down";
   return (
-    <div className="flex-1 rounded-2xl border border-border bg-card/70 p-3 text-center shadow-card">
+    <div className="flex-1 rounded-2xl border border-border glass p-3 text-center shadow-card transition-transform hover:-translate-y-0.5">
       <p className="text-[11px] font-semibold text-muted-foreground">{title}</p>
       <p className={`mt-1 font-display text-lg font-extrabold ${color}`}>{value}</p>
     </div>
@@ -55,8 +55,8 @@ export function MarketsPanel({ market }: { market: NewsMarket | undefined }) {
 
   return (
     <div className="space-y-3">
-      <div className="relative grain overflow-hidden rounded-3xl border border-primary/25 bg-card/70 p-4 shadow-card">
-        <div className="bg-aurora pointer-events-none absolute inset-0 opacity-70" />
+      <div className="relative grain ring-gradient overflow-hidden rounded-3xl border border-primary/25 glass p-4 shadow-float">
+        <div className="bg-aurora animate-aurora pointer-events-none absolute inset-0 opacity-70" />
         <div className="relative flex flex-col items-center">
           {market.fng ? (
             <Gauge value={market.fng.value} label={market.fng.label} />
@@ -79,7 +79,7 @@ export function MarketsPanel({ market }: { market: NewsMarket | undefined }) {
       </div>
 
       {market.coins?.length > 0 && (
-        <div className="overflow-hidden rounded-2xl border border-border bg-card/70 shadow-card">
+        <div className="overflow-hidden rounded-2xl border border-border glass shadow-card">
           <p className="border-b border-border px-4 py-2 text-xs font-bold uppercase tracking-wide text-muted-foreground">
             {t("market_coins")}
           </p>
@@ -126,7 +126,7 @@ export function MarketStrip({ market }: { market: NewsMarket | undefined }) {
   return (
     <div className="no-scrollbar flex gap-2 overflow-x-auto pb-1">
       {market.fng && (
-        <div className="shrink-0 rounded-xl border border-primary/30 bg-card/70 px-3 py-1.5 text-center">
+        <div className="shrink-0 rounded-xl border border-primary/30 glass px-3 py-1.5 text-center">
           <p className="text-[10px] font-semibold text-muted-foreground">F&amp;G</p>
           <p className="text-gradient font-display text-sm font-extrabold">{market.fng.value}</p>
         </div>
@@ -134,7 +134,7 @@ export function MarketStrip({ market }: { market: NewsMarket | undefined }) {
       {market.coins.slice(0, 8).map((c) => {
         const up = c.change_24h == null ? null : c.change_24h >= 0;
         return (
-          <div key={c.symbol} className="shrink-0 rounded-xl border border-border bg-card/70 px-3 py-1.5 text-center">
+          <div key={c.symbol} className="shrink-0 rounded-xl border border-border glass px-3 py-1.5 text-center">
             <p className="text-[10px] font-bold">{c.symbol.toUpperCase()}</p>
             <p
               className={`font-display text-sm font-bold tabular-nums ${

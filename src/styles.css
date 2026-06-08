@@ -1,7 +1,6 @@
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
-@import url("https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap");
 
 @custom-variant dark (&:is(.dark *));
 
@@ -119,6 +118,9 @@
   --gradient-aurora: radial-gradient(120% 80% at 50% -10%, oklch(0.72 0.2 160 / 0.45), transparent 60%);
   --glow-lime: 0 0 24px oklch(0.85 0.24 140 / 0.45);
   --shadow-card: 0 8px 30px -12px oklch(0.1 0.04 150 / 0.7);
+  --gradient-sheen: linear-gradient(110deg, transparent 20%, oklch(1 0 0 / 0.08) 45%, oklch(1 0 0 / 0.14) 50%, oklch(1 0 0 / 0.08) 55%, transparent 80%);
+  --glow-lime-lg: 0 0 0 1px oklch(0.85 0.24 140 / 0.12), 0 10px 40px -8px oklch(0.85 0.24 140 / 0.4);
+  --shadow-float: 0 24px 60px -20px oklch(0.05 0.04 150 / 0.85), 0 6px 18px -10px oklch(0.05 0.04 150 / 0.6);
 }
 
 .dark {
@@ -135,6 +137,11 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(60% 50% at 8% -5%, oklch(0.72 0.2 160 / 0.18), transparent 60%),
+      radial-gradient(55% 45% at 100% 0%, oklch(0.82 0.16 175 / 0.14), transparent 55%),
+      radial-gradient(70% 55% at 50% 110%, oklch(0.9 0.25 130 / 0.1), transparent 60%);
+    background-attachment: fixed;
   }
 
   h1, h2, h3, .font-display {
@@ -176,6 +183,91 @@
     opacity: 0.04;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
+  .glass {
+    background: oklch(0.21 0.035 158 / 0.55);
+    backdrop-filter: blur(16px) saturate(140%);
+    border: 1px solid oklch(1 0 0 / 0.08);
+  }
+  .glass-strong {
+    background: oklch(0.21 0.035 158 / 0.78);
+    backdrop-filter: blur(22px) saturate(150%);
+    border: 1px solid oklch(1 0 0 / 0.1);
+  }
+  .shadow-float {
+    box-shadow: var(--shadow-float);
+  }
+  .glow-lime-lg {
+    box-shadow: var(--glow-lime-lg);
+  }
+  .ring-gradient {
+    position: relative;
+  }
+  .ring-gradient::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: var(--gradient-hero);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0.6;
+  }
+  .card-sheen {
+    position: relative;
+    overflow: hidden;
+  }
+  .card-sheen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--gradient-sheen);
+    background-size: 250% 100%;
+    background-position: 200% 0;
+    pointer-events: none;
+    opacity: 0;
+  }
+  .card-sheen:hover::after,
+  .card-sheen:active::after {
+    opacity: 1;
+    animation: sheen 0.9s ease forwards;
+  }
+}
+
+@keyframes sheen {
+  from { background-position: 200% 0; }
+  to { background-position: -120% 0; }
+}
+
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+.animate-float { animation: float-y 5.5s ease-in-out infinite; }
+
+@keyframes aurora-shift {
+  0%, 100% { transform: translate3d(-4%, -2%, 0) scale(1.05); }
+  50% { transform: translate3d(4%, 3%, 0) scale(1.15); }
+}
+.animate-aurora { animation: aurora-shift 14s ease-in-out infinite; }
+
+@keyframes shimmer-sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+.skeleton-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.skeleton-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, oklch(0.85 0.24 140 / 0.12), transparent);
+  transform: translateX(-100%);
+  animation: shimmer-sweep 1.6s ease-in-out infinite;
 }
 
 @keyframes pulse-dot {

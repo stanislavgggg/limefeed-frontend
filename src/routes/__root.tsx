@@ -93,13 +93,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary" },
       { name: "theme-color", content: "#06120C" },
       { name: "twitter:title", content: "Green Lime Feed — money news + live scores" },
-      { name: "description", content: "Follow The Guide helps users complete tasks by providing step-by-step instructions." },
-      { property: "og:description", content: "Follow The Guide helps users complete tasks by providing step-by-step instructions." },
-      { name: "twitter:description", content: "Follow The Guide helps users complete tasks by providing step-by-step instructions." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/3e2e5306-551f-4aa2-9598-b37996b07443/id-preview-c5459ba8--b383cd63-b913-46f7-b60d-5c9324ba2edc.lovable.app-1780932018850.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/3e2e5306-551f-4aa2-9598-b37996b07443/id-preview-c5459ba8--b383cd63-b913-46f7-b60d-5c9324ba2edc.lovable.app-1780932018850.png" },
     ],
     links: [
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap",
+      },
       {
         rel: "stylesheet",
         href: appCss,

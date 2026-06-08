@@ -24,7 +24,9 @@ export function LiveCard({
 
   return (
     <article
-      className="animate-rise rounded-2xl border border-border bg-card/70 p-3.5 shadow-card"
+      className={`animate-rise card-sheen rounded-2xl border p-3.5 shadow-card transition-all duration-300 hover:-translate-y-0.5 hover:shadow-float ${
+        live ? "border-up/40 glass glow-lime" : "border-border glass"
+      }`}
       style={{ animationDelay: `${Math.min(index, 8) * 40}ms` }}
     >
       <div className="mb-2 flex items-center justify-between text-[11px]">
@@ -33,7 +35,7 @@ export function LiveCard({
           {match.league ? ` · ${match.league}` : ""}
         </span>
         {live ? (
-          <span className="flex items-center gap-1 rounded-md bg-up/15 px-1.5 py-0.5 font-bold text-up">
+          <span className="flex items-center gap-1 rounded-md bg-up/20 px-2 py-0.5 font-bold uppercase tracking-wide text-up">
             <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-up" />
             {t("live")}
           </span>
@@ -45,14 +47,14 @@ export function LiveCard({
       </div>
       <div className="flex items-center justify-between gap-2">
         <span className="flex-1 truncate text-right font-display text-sm font-bold">{match.team1}</span>
-        <span className="shrink-0 rounded-lg bg-background/60 px-2.5 py-1 font-display text-base font-extrabold text-foreground">
+        <span className="ring-gradient shrink-0 rounded-xl bg-background/70 px-3 py-1.5 font-display text-base font-extrabold text-foreground tabular-nums">
           {match.score1 ?? "–"} <span className="text-muted-foreground">:</span> {match.score2 ?? "–"}
         </span>
         <span className="flex-1 truncate font-display text-sm font-bold">{match.team2}</span>
       </div>
       <button
         onClick={tap}
-        className="mt-3 w-full rounded-xl bg-secondary py-2 text-xs font-bold text-foreground transition-colors hover:bg-primary/15 hover:text-primary active:scale-95"
+        className="mt-3 w-full rounded-xl bg-secondary py-2.5 text-xs font-bold text-foreground transition-all hover:bg-primary/15 hover:text-primary active:scale-95"
       >
         {t("join")}
       </button>

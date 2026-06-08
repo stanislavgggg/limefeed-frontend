@@ -21,19 +21,22 @@ export function LockedCard({ teaser, onUnlock }: { teaser?: string; onUnlock: ()
   };
 
   return (
-    <article className="animate-rise relative overflow-hidden rounded-2xl border border-primary/30 bg-card/70 p-4 shadow-card">
+    <article className="animate-rise ring-gradient relative overflow-hidden rounded-2xl border border-primary/30 glass p-4 shadow-card">
+      <div className="bg-aurora pointer-events-none absolute inset-0 opacity-40" />
       {teaser && (
-        <p className="select-none text-[15px] font-bold leading-snug text-foreground blur-[6px]">
+        <p className="relative select-none text-[15px] font-bold leading-snug text-foreground/80 blur-[7px]">
           {teaser}
         </p>
       )}
       <div className="relative mt-3 flex flex-col items-center gap-2 text-center">
-        <LimeMark className="h-9 w-9" />
+        <div className="animate-float grid h-12 w-12 place-items-center rounded-2xl glass glow-lime">
+          <LimeMark className="h-8 w-8" />
+        </div>
         <p className="font-display text-sm font-extrabold text-foreground">{t("locked_title")}</p>
         <p className="max-w-[16rem] text-xs text-muted-foreground">{t("locked_sub")}</p>
         <button
           onClick={tap}
-          className="mt-1 w-full rounded-xl bg-gradient-cta py-2.5 text-sm font-extrabold text-primary-foreground shadow-card glow-lime active:scale-95"
+          className="card-sheen mt-1 w-full rounded-xl bg-gradient-cta py-3 text-sm font-extrabold text-primary-foreground shadow-card glow-lime transition-transform active:scale-95"
         >
           🔓 {t("subscribe")}
         </button>
