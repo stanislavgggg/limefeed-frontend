@@ -20,9 +20,9 @@ export type Localized = string | { en?: string; ru?: string; es?: string };
 
 export interface AppConfig {
   brand: string;
-  display_name: string;
-  tagline: string;
-  character: { name: string; role: string };
+  display_name: Localized;
+  tagline: Localized;
+  character: { name: Localized; role: Localized };
   mode: "product" | "channel";
   show_offer: boolean;
   cta: {
