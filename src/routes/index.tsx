@@ -23,11 +23,15 @@ import { FilterRail, type Tab } from "@/components/app/FilterRail";
 import { NewsCard } from "@/components/app/cards/NewsCard";
 import { LiveCard } from "@/components/app/cards/LiveCard";
 import { LockedCard } from "@/components/app/cards/LockedCard";
+import { PinnedMatchCard } from "@/components/app/cards/PinnedMatchCard";
 import { MarketsPanel, MarketStrip } from "@/components/app/MarketsPanel";
 import { SubscribeBar } from "@/components/app/SubscribeBar";
 import { Interstitial } from "@/components/app/Interstitial";
 import { ValueStrip } from "@/components/app/ValueStrip";
 import { Onboarding } from "@/components/app/Onboarding";
+import { ChannelScreen } from "@/components/app/ChannelScreen";
+import { BottomNav, type Section } from "@/components/app/BottomNav";
+import { InView } from "@/components/app/InView";
 import {
   FeedSkeleton,
   EmptyState,
