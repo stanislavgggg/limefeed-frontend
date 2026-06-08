@@ -78,7 +78,7 @@ export function ErrorState({
 }) {
   return (
     <div className="flex flex-col items-center gap-3 py-12 text-center">
-      <LimoAvatar className="h-20 w-20 opacity-90" />
+      <LimoAvatar className="animate-float h-24 w-24 opacity-90" />
       <div>
         <p className="font-display text-base font-bold text-foreground">{title}</p>
         <p className="mt-1 max-w-[18rem] text-sm text-muted-foreground">{sub}</p>
