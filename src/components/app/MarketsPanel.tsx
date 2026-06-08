@@ -126,7 +126,7 @@ export function MarketStrip({ market }: { market: NewsMarket | undefined }) {
   return (
     <div className="no-scrollbar flex gap-2 overflow-x-auto pb-1">
       {market.fng && (
-        <div className="shrink-0 rounded-xl border border-primary/30 bg-card/70 px-3 py-1.5 text-center">
+        <div className="shrink-0 rounded-xl border border-primary/30 glass px-3 py-1.5 text-center">
           <p className="text-[10px] font-semibold text-muted-foreground">F&amp;G</p>
           <p className="text-gradient font-display text-sm font-extrabold">{market.fng.value}</p>
         </div>
@@ -134,7 +134,7 @@ export function MarketStrip({ market }: { market: NewsMarket | undefined }) {
       {market.coins.slice(0, 8).map((c) => {
         const up = c.change_24h == null ? null : c.change_24h >= 0;
         return (
-          <div key={c.symbol} className="shrink-0 rounded-xl border border-border bg-card/70 px-3 py-1.5 text-center">
+          <div key={c.symbol} className="shrink-0 rounded-xl border border-border glass px-3 py-1.5 text-center">
             <p className="text-[10px] font-bold">{c.symbol.toUpperCase()}</p>
             <p
               className={`font-display text-sm font-bold tabular-nums ${
