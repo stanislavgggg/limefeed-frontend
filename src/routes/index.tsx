@@ -66,11 +66,14 @@ function Index() {
   const { t, lang } = useI18n();
   const queryClient = useQueryClient();
 
+  const [section, setSection] = useState<Section>("feed");
   const [tab, setTab] = useState<Tab>("hot");
   const [category, setCategory] = useState<Category>("all");
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showInterstitial, setShowInterstitial] = useState(false);
   const [celebrate, setCelebrate] = useState(false);
+  const [newsLockReached, setNewsLockReached] = useState(false);
+  const [liveStickyShown, setLiveStickyShown] = useState(false);
   const openedCount = useRef(0);
   const wasMember = useRef<boolean | null>(null);
 
