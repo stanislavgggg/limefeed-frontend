@@ -55,8 +55,8 @@ export function MarketsPanel({ market }: { market: NewsMarket | undefined }) {
 
   return (
     <div className="space-y-3">
-      <div className="relative grain overflow-hidden rounded-3xl border border-primary/25 bg-card/70 p-4 shadow-card">
-        <div className="bg-aurora pointer-events-none absolute inset-0 opacity-70" />
+      <div className="relative grain ring-gradient overflow-hidden rounded-3xl border border-primary/25 glass p-4 shadow-float">
+        <div className="bg-aurora animate-aurora pointer-events-none absolute inset-0 opacity-70" />
         <div className="relative flex flex-col items-center">
           {market.fng ? (
             <Gauge value={market.fng.value} label={market.fng.label} />
