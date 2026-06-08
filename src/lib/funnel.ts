@@ -166,11 +166,11 @@ export function openChannel(config: AppConfig | undefined, surface: string) {
 }
 
 // Resolved display values: runtime config first, env/brand fallback.
-export function resolveBranding(config: AppConfig | undefined) {
+export function resolveBranding(config: AppConfig | undefined, lang: Lang = "en") {
   return {
-    displayName: config?.display_name || BRAND.wordmark,
-    tagline: config?.tagline || "",
-    characterName: config?.character?.name || BRAND.mascot.name,
+    displayName: pickLabel(config?.display_name, lang, BRAND.wordmark),
+    tagline: pickLabel(config?.tagline, lang, ""),
+    characterName: pickLabel(config?.character?.name, lang, BRAND.mascot.name),
     channel: config?.cta.channel || BRAND.channelHandle,
     botUsername: config?.cta.bot_username || BRAND.botUsername,
     privacyUrl: config?.privacy_url || "",
