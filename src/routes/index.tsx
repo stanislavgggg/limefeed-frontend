@@ -182,6 +182,26 @@ function Index() {
 
   const handleOpenChannel = (surface: string) => openChannel(cfg, surface);
 
+  // ---- Live sticky CTA: reveal after dwell time or scroll, once per visit ----
+  useEffect(() => {
+    if (section !== "live" || !gated) return;
+    let done = false;
+    const show = () => {
+      if (done) return;
+      done = true;
+      setLiveStickyShown(true);
+    };
+    const timer = setTimeout(show, 6000);
+    const onScroll = () => {
+      if (window.scrollY > 240) show();
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, [section, gated]);
+
   const onItemOpened = () => {
     openedCount.current += 1;
     if (openedCount.current >= 3) maybeInterstitial();
