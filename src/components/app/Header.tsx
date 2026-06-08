@@ -8,8 +8,8 @@ export function Header({ displayName, tagline }: { displayName: string; tagline:
     <header className="relative grain overflow-hidden">
       <div className="bg-aurora animate-aurora pointer-events-none absolute inset-0" />
       <div className="pointer-events-none absolute -left-10 -top-10 h-32 w-32 rounded-full bg-primary/20 blur-3xl" />
-      <div className="relative flex items-center justify-between gap-3 px-4 pb-4 pt-[max(0.85rem,env(safe-area-inset-top))]">
-        <div className="flex items-center gap-2.5">
+      <div className="relative flex items-center justify-between gap-2 px-4 pb-4 pt-[max(0.85rem,env(safe-area-inset-top))]">
+        <div className="flex min-w-0 items-center gap-2.5">
           <div className="animate-float relative grid h-11 w-11 shrink-0 place-items-center rounded-2xl glass glow-lime">
             <LimeMark className="h-7 w-7" />
           </div>
