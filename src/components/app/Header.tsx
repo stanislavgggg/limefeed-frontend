@@ -1,5 +1,5 @@
 import { useI18n } from "@/lib/i18n";
-import { LimeMark } from "./Mascot";
+import { LimoAvatar } from "./Mascot";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 
 export function Header({ displayName, tagline }: { displayName: string; tagline: string }) {
@@ -10,9 +10,7 @@ export function Header({ displayName, tagline }: { displayName: string; tagline:
       <div className="pointer-events-none absolute -left-10 -top-10 h-32 w-32 rounded-full bg-primary/20 blur-3xl" />
       <div className="relative flex items-center justify-between gap-2 px-4 pb-4 pt-[max(0.85rem,env(safe-area-inset-top))]">
         <div className="flex min-w-0 items-center gap-2.5">
-          <div className="animate-float relative grid h-11 w-11 shrink-0 place-items-center rounded-2xl glass glow-lime">
-            <LimeMark className="h-7 w-7" />
-          </div>
+          <LimoAvatar className="animate-float h-11 w-11 shrink-0" />
           <div className="min-w-0 leading-tight">
             <h1 className="text-gradient font-display text-[20px] font-extrabold leading-tight tracking-tight">
               {displayName}
