@@ -14,7 +14,7 @@ export function Header({ displayName, tagline }: { displayName: string; tagline:
             <LimeMark className="h-7 w-7" />
           </div>
           <div className="min-w-0 leading-tight">
-            <h1 className="text-gradient truncate font-display text-[20px] font-extrabold leading-tight tracking-tight">
+            <h1 className="text-gradient font-display text-[20px] font-extrabold leading-tight tracking-tight">
               {displayName}
             </h1>
             <div className="mt-0.5 flex items-center gap-1.5">
