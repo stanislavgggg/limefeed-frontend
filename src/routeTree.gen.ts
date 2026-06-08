@@ -12,6 +12,13 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiUpcomingRouteImport } from './routes/api/upcoming'
+import { Route as ApiStatsRouteImport } from './routes/api/stats'
+import { Route as ApiNewsRouteImport } from './routes/api/news'
+import { Route as ApiMembershipRouteImport } from './routes/api/membership'
+import { Route as ApiLiveRouteImport } from './routes/api/live'
+import { Route as ApiEventRouteImport } from './routes/api/event'
+import { Route as ApiConfigRouteImport } from './routes/api/config'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -28,35 +35,129 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiUpcomingRoute = ApiUpcomingRouteImport.update({
+  id: '/api/upcoming',
+  path: '/api/upcoming',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiStatsRoute = ApiStatsRouteImport.update({
+  id: '/api/stats',
+  path: '/api/stats',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiNewsRoute = ApiNewsRouteImport.update({
+  id: '/api/news',
+  path: '/api/news',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMembershipRoute = ApiMembershipRouteImport.update({
+  id: '/api/membership',
+  path: '/api/membership',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiLiveRoute = ApiLiveRouteImport.update({
+  id: '/api/live',
+  path: '/api/live',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiEventRoute = ApiEventRouteImport.update({
+  id: '/api/event',
+  path: '/api/event',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiConfigRoute = ApiConfigRouteImport.update({
+  id: '/api/config',
+  path: '/api/config',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/api/config': typeof ApiConfigRoute
+  '/api/event': typeof ApiEventRoute
+  '/api/live': typeof ApiLiveRoute
+  '/api/membership': typeof ApiMembershipRoute
+  '/api/news': typeof ApiNewsRoute
+  '/api/stats': typeof ApiStatsRoute
+  '/api/upcoming': typeof ApiUpcomingRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/api/config': typeof ApiConfigRoute
+  '/api/event': typeof ApiEventRoute
+  '/api/live': typeof ApiLiveRoute
+  '/api/membership': typeof ApiMembershipRoute
+  '/api/news': typeof ApiNewsRoute
+  '/api/stats': typeof ApiStatsRoute
+  '/api/upcoming': typeof ApiUpcomingRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/api/config': typeof ApiConfigRoute
+  '/api/event': typeof ApiEventRoute
+  '/api/live': typeof ApiLiveRoute
+  '/api/membership': typeof ApiMembershipRoute
+  '/api/news': typeof ApiNewsRoute
+  '/api/stats': typeof ApiStatsRoute
+  '/api/upcoming': typeof ApiUpcomingRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/privacy' | '/sitemap.xml'
+  fullPaths:
+    | '/'
+    | '/privacy'
+    | '/sitemap.xml'
+    | '/api/config'
+    | '/api/event'
+    | '/api/live'
+    | '/api/membership'
+    | '/api/news'
+    | '/api/stats'
+    | '/api/upcoming'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/privacy' | '/sitemap.xml'
-  id: '__root__' | '/' | '/privacy' | '/sitemap.xml'
+  to:
+    | '/'
+    | '/privacy'
+    | '/sitemap.xml'
+    | '/api/config'
+    | '/api/event'
+    | '/api/live'
+    | '/api/membership'
+    | '/api/news'
+    | '/api/stats'
+    | '/api/upcoming'
+  id:
+    | '__root__'
+    | '/'
+    | '/privacy'
+    | '/sitemap.xml'
+    | '/api/config'
+    | '/api/event'
+    | '/api/live'
+    | '/api/membership'
+    | '/api/news'
+    | '/api/stats'
+    | '/api/upcoming'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   PrivacyRoute: typeof PrivacyRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  ApiConfigRoute: typeof ApiConfigRoute
+  ApiEventRoute: typeof ApiEventRoute
+  ApiLiveRoute: typeof ApiLiveRoute
+  ApiMembershipRoute: typeof ApiMembershipRoute
+  ApiNewsRoute: typeof ApiNewsRoute
+  ApiStatsRoute: typeof ApiStatsRoute
+  ApiUpcomingRoute: typeof ApiUpcomingRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -82,6 +183,55 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/upcoming': {
+      id: '/api/upcoming'
+      path: '/api/upcoming'
+      fullPath: '/api/upcoming'
+      preLoaderRoute: typeof ApiUpcomingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/stats': {
+      id: '/api/stats'
+      path: '/api/stats'
+      fullPath: '/api/stats'
+      preLoaderRoute: typeof ApiStatsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/news': {
+      id: '/api/news'
+      path: '/api/news'
+      fullPath: '/api/news'
+      preLoaderRoute: typeof ApiNewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/membership': {
+      id: '/api/membership'
+      path: '/api/membership'
+      fullPath: '/api/membership'
+      preLoaderRoute: typeof ApiMembershipRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/live': {
+      id: '/api/live'
+      path: '/api/live'
+      fullPath: '/api/live'
+      preLoaderRoute: typeof ApiLiveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/event': {
+      id: '/api/event'
+      path: '/api/event'
+      fullPath: '/api/event'
+      preLoaderRoute: typeof ApiEventRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/config': {
+      id: '/api/config'
+      path: '/api/config'
+      fullPath: '/api/config'
+      preLoaderRoute: typeof ApiConfigRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,6 +239,13 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   PrivacyRoute: PrivacyRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  ApiConfigRoute: ApiConfigRoute,
+  ApiEventRoute: ApiEventRoute,
+  ApiLiveRoute: ApiLiveRoute,
+  ApiMembershipRoute: ApiMembershipRoute,
+  ApiNewsRoute: ApiNewsRoute,
+  ApiStatsRoute: ApiStatsRoute,
+  ApiUpcomingRoute: ApiUpcomingRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
