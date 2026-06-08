@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiUpcomingRouteImport } from './routes/api/upcoming'
 import { Route as ApiNewsRouteImport } from './routes/api/news'
 import { Route as ApiLiveRouteImport } from './routes/api/live'
 import { Route as ApiConfigRouteImport } from './routes/api/config'
@@ -29,6 +30,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiUpcomingRoute = ApiUpcomingRouteImport.update({
+  id: '/api/upcoming',
+  path: '/api/upcoming',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiNewsRoute = ApiNewsRouteImport.update({
@@ -54,6 +60,7 @@ export interface FileRoutesByFullPath {
   '/api/config': typeof ApiConfigRoute
   '/api/live': typeof ApiLiveRoute
   '/api/news': typeof ApiNewsRoute
+  '/api/upcoming': typeof ApiUpcomingRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +69,7 @@ export interface FileRoutesByTo {
   '/api/config': typeof ApiConfigRoute
   '/api/live': typeof ApiLiveRoute
   '/api/news': typeof ApiNewsRoute
+  '/api/upcoming': typeof ApiUpcomingRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,6 +79,7 @@ export interface FileRoutesById {
   '/api/config': typeof ApiConfigRoute
   '/api/live': typeof ApiLiveRoute
   '/api/news': typeof ApiNewsRoute
+  '/api/upcoming': typeof ApiUpcomingRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -81,6 +90,7 @@ export interface FileRouteTypes {
     | '/api/config'
     | '/api/live'
     | '/api/news'
+    | '/api/upcoming'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -89,6 +99,7 @@ export interface FileRouteTypes {
     | '/api/config'
     | '/api/live'
     | '/api/news'
+    | '/api/upcoming'
   id:
     | '__root__'
     | '/'
@@ -97,6 +108,7 @@ export interface FileRouteTypes {
     | '/api/config'
     | '/api/live'
     | '/api/news'
+    | '/api/upcoming'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -106,6 +118,7 @@ export interface RootRouteChildren {
   ApiConfigRoute: typeof ApiConfigRoute
   ApiLiveRoute: typeof ApiLiveRoute
   ApiNewsRoute: typeof ApiNewsRoute
+  ApiUpcomingRoute: typeof ApiUpcomingRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -129,6 +142,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/upcoming': {
+      id: '/api/upcoming'
+      path: '/api/upcoming'
+      fullPath: '/api/upcoming'
+      preLoaderRoute: typeof ApiUpcomingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/news': {
@@ -162,6 +182,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiConfigRoute: ApiConfigRoute,
   ApiLiveRoute: ApiLiveRoute,
   ApiNewsRoute: ApiNewsRoute,
+  ApiUpcomingRoute: ApiUpcomingRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
