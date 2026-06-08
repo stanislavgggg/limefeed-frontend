@@ -59,7 +59,7 @@ export function FeedSkeleton({ count = 5 }: { count?: number }) {
 export function EmptyState({ message }: { message: string }) {
   return (
     <div className="flex flex-col items-center gap-3 py-12 text-center">
-      <LimoAvatar className="h-20 w-20 opacity-90" />
+      <LimoAvatar className="animate-float h-24 w-24 opacity-90" />
       <p className="max-w-[16rem] text-sm text-muted-foreground">{message}</p>
     </div>
   );
