@@ -13,6 +13,7 @@ import {
   getMembership,
   openChannel,
   resolveBranding,
+  postEvent,
   type Category,
   type NewsItem,
   type BackendMatch,
