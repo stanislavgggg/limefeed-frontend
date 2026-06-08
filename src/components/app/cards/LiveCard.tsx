@@ -1,26 +1,17 @@
 import { useI18n } from "@/lib/i18n";
 import { relativeTime } from "@/lib/time";
-import { haptic } from "@/lib/telegram";
-import { postEvent, type BackendMatch } from "@/lib/funnel";
+import { type BackendMatch } from "@/lib/funnel";
 
 export function LiveCard({
   match,
   live,
   index = 0,
-  onCta,
 }: {
   match: BackendMatch;
   live: boolean;
   index?: number;
-  onCta: () => void;
 }) {
   const { t, lang } = useI18n();
-
-  const tap = () => {
-    haptic("medium");
-    postEvent("cta_tap", { surface: "live_match", game: match.game });
-    onCta();
-  };
 
   return (
     <article
@@ -52,12 +43,6 @@ export function LiveCard({
         </span>
         <span className="flex-1 truncate font-display text-sm font-bold">{match.team2}</span>
       </div>
-      <button
-        onClick={tap}
-        className="mt-3 w-full rounded-xl bg-secondary py-2.5 text-xs font-bold text-foreground transition-all hover:bg-primary/15 hover:text-primary active:scale-95"
-      >
-        {t("join")}
-      </button>
     </article>
   );
 }
