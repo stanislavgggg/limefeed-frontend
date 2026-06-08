@@ -13,8 +13,8 @@ export function Header({ displayName, tagline }: { displayName: string; tagline:
           <div className="animate-float relative grid h-11 w-11 shrink-0 place-items-center rounded-2xl glass glow-lime">
             <LimeMark className="h-7 w-7" />
           </div>
-          <div className="leading-tight">
-            <h1 className="text-gradient font-display text-[22px] font-extrabold tracking-tight">
+          <div className="min-w-0 leading-tight">
+            <h1 className="text-gradient truncate font-display text-[20px] font-extrabold leading-tight tracking-tight">
               {displayName}
             </h1>
             <div className="mt-0.5 flex items-center gap-1.5">
