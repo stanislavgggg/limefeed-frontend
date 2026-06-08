@@ -42,7 +42,7 @@ function Stat({ title, value, positive }: { title: string; value: string; positi
   const color =
     positive == null ? "text-foreground" : positive ? "text-up" : "text-down";
   return (
-    <div className="flex-1 rounded-2xl border border-border bg-card/70 p-3 text-center shadow-card">
+    <div className="flex-1 rounded-2xl border border-border glass p-3 text-center shadow-card transition-transform hover:-translate-y-0.5">
       <p className="text-[11px] font-semibold text-muted-foreground">{title}</p>
       <p className={`mt-1 font-display text-lg font-extrabold ${color}`}>{value}</p>
     </div>
