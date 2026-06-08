@@ -2,23 +2,31 @@ import { useEffect, useRef } from "react";
 import { useI18n } from "@/lib/i18n";
 import { postEvent } from "@/lib/funnel";
 
-export function SubscribeBar({ label, onOpen }: { label: string; onOpen: () => void }) {
+export function SubscribeBar({
+  label,
+  onOpen,
+  surface = "sticky",
+}: {
+  label: string;
+  onOpen: () => void;
+  surface?: string;
+}) {
   const { t } = useI18n();
   const viewed = useRef(false);
 
   useEffect(() => {
     if (viewed.current) return;
     viewed.current = true;
-    postEvent("cta_view", { surface: "sticky" });
-  }, []);
+    postEvent("cta_view", { surface });
+  }, [surface]);
 
   const tap = () => {
-    postEvent("cta_tap", { surface: "sticky" });
+    postEvent("cta_tap", { surface });
     onOpen();
   };
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 mx-auto max-w-[480px] px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2">
+    <div className="fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom)+4.25rem)] z-40 mx-auto max-w-[480px] px-3 pb-2 pt-2">
       <button
         onClick={tap}
         className="animate-pulse-dot relative w-full overflow-hidden rounded-2xl bg-gradient-cta py-3.5 font-display text-base font-extrabold text-primary-foreground shadow-card glow-lime active:scale-[0.98]"
