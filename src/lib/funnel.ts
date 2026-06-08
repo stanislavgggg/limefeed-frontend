@@ -5,6 +5,7 @@
 
 import { BRAND } from "./brand";
 import { getUid, openExternal } from "./telegram";
+import { pickLabel, type Lang } from "./i18n";
 
 // API base reader MUST stay this exact form: absolute URL, default "".
 const API_BASE = import.meta.env.VITE_API_BASE || "";
@@ -14,11 +15,14 @@ const API_BASE = import.meta.env.VITE_API_BASE || "";
 // ---------------------------------------------------------------------------
 export type Category = "all" | "crypto" | "casino" | "esports";
 
+// Some backend fields arrive either as a plain string or a localized object.
+export type Localized = string | { en?: string; ru?: string; es?: string };
+
 export interface AppConfig {
   brand: string;
-  display_name: string;
-  tagline: string;
-  character: { name: string; role: string };
+  display_name: Localized;
+  tagline: Localized;
+  character: { name: Localized; role: Localized };
   mode: "product" | "channel";
   show_offer: boolean;
   cta: {
@@ -162,11 +166,11 @@ export function openChannel(config: AppConfig | undefined, surface: string) {
 }
 
 // Resolved display values: runtime config first, env/brand fallback.
-export function resolveBranding(config: AppConfig | undefined) {
+export function resolveBranding(config: AppConfig | undefined, lang: Lang = "en") {
   return {
-    displayName: config?.display_name || BRAND.wordmark,
-    tagline: config?.tagline || "",
-    characterName: config?.character?.name || BRAND.mascot.name,
+    displayName: pickLabel(config?.display_name, lang, BRAND.wordmark),
+    tagline: pickLabel(config?.tagline, lang, ""),
+    characterName: pickLabel(config?.character?.name, lang, BRAND.mascot.name),
     channel: config?.cta.channel || BRAND.channelHandle,
     botUsername: config?.cta.bot_username || BRAND.botUsername,
     privacyUrl: config?.privacy_url || "",
