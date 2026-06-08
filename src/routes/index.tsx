@@ -346,26 +346,22 @@ function TabContent({
   gated,
   news,
   newsAll,
-  live,
   liveMatches,
-  upcomingMatches,
   market,
   onItemOpened,
   onUnlock,
-  onLiveCta,
+  onLockReached,
 }: {
   tab: Tab;
   category: Category;
   gated: boolean;
   news: Q<import("@/lib/funnel").NewsResponse>;
   newsAll: Q<import("@/lib/funnel").NewsResponse>;
-  live: Q<{ matches: BackendMatch[] }>;
   liveMatches: BackendMatch[];
-  upcomingMatches: BackendMatch[];
   market: import("@/lib/funnel").NewsMarket | undefined;
   onItemOpened: () => void;
   onUnlock: () => void;
-  onLiveCta: () => void;
+  onLockReached: () => void;
 }) {
   const { t } = useI18n();
 
@@ -373,32 +369,6 @@ function TabContent({
     if (newsAll.isLoading && !market) return <FeedSkeleton count={3} />;
     if (!market) return <EmptyState message={t("empty_news")} />;
     return <MarketsPanel market={market} />;
-  }
-
-  if (tab === "live") {
-    if ((live.isLoading) && liveMatches.length === 0 && upcomingMatches.length === 0)
-      return <FeedSkeleton />;
-    if (live.isError && liveMatches.length === 0)
-      return (
-        <ErrorState
-          title={t("error_title")}
-          sub={t("error_sub")}
-          retryLabel={t("retry")}
-          onRetry={() => live.refetch()}
-        />
-      );
-    if (liveMatches.length === 0 && upcomingMatches.length === 0)
-      return <EmptyState message={t("empty_live")} />;
-    return (
-      <div className="space-y-3">
-        {liveMatches.map((m, i) => (
-          <LiveCard key={`l-${m.id ?? i}`} match={m} live index={i} onCta={onLiveCta} />
-        ))}
-        {upcomingMatches.map((m, i) => (
-          <LiveCard key={`u-${m.id ?? i}`} match={m} live={false} index={i} onCta={onLiveCta} />
-        ))}
-      </div>
-    );
   }
 
   // hot + news both render a news feed (hot interleaves live first)
@@ -422,9 +392,68 @@ function TabContent({
     <div className="space-y-3">
       {tab === "hot" &&
         liveMatches.map((m, i) => (
-          <LiveCard key={`hot-l-${m.id ?? i}`} match={m} live index={i} onCta={onLiveCta} />
+          <LiveCard key={`hot-l-${m.id ?? i}`} match={m} live index={i} />
         ))}
-      <GatedNews items={items} gated={gated} onItemOpened={onItemOpened} onUnlock={onUnlock} />
+      <GatedNews
+        items={items}
+        gated={gated}
+        onItemOpened={onItemOpened}
+        onUnlock={onUnlock}
+        onLockReached={onLockReached}
+      />
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Live section: pinned hero match + score cards (no per-card CTA).
+// ---------------------------------------------------------------------------
+function LiveSection({
+  live,
+  liveMatches,
+  upcomingMatches,
+  pinnedMatch,
+  pinnedIsLive,
+  onPinnedCta,
+}: {
+  live: Q<{ matches: BackendMatch[] }>;
+  liveMatches: BackendMatch[];
+  upcomingMatches: BackendMatch[];
+  pinnedMatch: BackendMatch | undefined;
+  pinnedIsLive: boolean;
+  onPinnedCta: () => void;
+}) {
+  const { t } = useI18n();
+
+  if (live.isLoading && liveMatches.length === 0 && upcomingMatches.length === 0)
+    return <FeedSkeleton />;
+  if (live.isError && liveMatches.length === 0)
+    return (
+      <ErrorState
+        title={t("error_title")}
+        sub={t("error_sub")}
+        retryLabel={t("retry")}
+        onRetry={() => live.refetch()}
+      />
+    );
+  if (liveMatches.length === 0 && upcomingMatches.length === 0)
+    return <EmptyState message={t("empty_live")} />;
+
+  // Exclude the pinned match from the regular lists to avoid duplication.
+  const restLive = pinnedIsLive ? liveMatches.slice(1) : liveMatches;
+  const restUpcoming = pinnedIsLive ? upcomingMatches : upcomingMatches.slice(1);
+
+  return (
+    <div className="space-y-3">
+      {pinnedMatch && (
+        <PinnedMatchCard match={pinnedMatch} live={pinnedIsLive} onCta={onPinnedCta} />
+      )}
+      {restLive.map((m, i) => (
+        <LiveCard key={`l-${m.id ?? i}`} match={m} live index={i} />
+      ))}
+      {restUpcoming.map((m, i) => (
+        <LiveCard key={`u-${m.id ?? i}`} match={m} live={false} index={i} />
+      ))}
     </div>
   );
 }
@@ -434,12 +463,15 @@ function GatedNews({
   gated,
   onItemOpened,
   onUnlock,
+  onLockReached,
 }: {
   items: NewsItem[];
   gated: boolean;
   onItemOpened: () => void;
   onUnlock: () => void;
+  onLockReached: () => void;
 }) {
+  const { t } = useI18n();
   if (!gated) {
     return (
       <>
@@ -455,6 +487,17 @@ function GatedNews({
   // Free preview: first 2 items, then interleaved locked cards.
   const free = items.slice(0, 2);
   const locked = items.slice(2, 8);
+  if (locked.length === 0) {
+    return (
+      <>
+        {free.map((item, i) => (
+          <div key={item.id} onClickCapture={onItemOpened}>
+            <NewsCard item={item} index={i} />
+          </div>
+        ))}
+      </>
+    );
+  }
   return (
     <>
       {free.map((item, i) => (
@@ -462,6 +505,11 @@ function GatedNews({
           <NewsCard item={item} index={i} />
         </div>
       ))}
+      <InView onInView={onLockReached} rootMargin="0px 0px -120px 0px" />
+      <p className="flex items-center justify-center gap-1.5 px-1 text-[11px] font-semibold text-muted-foreground">
+        <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-up" />
+        {t("lock_social_proof")}
+      </p>
       {locked.map((item) => (
         <LockedCard key={item.id} teaser={item.title} onUnlock={onUnlock} />
       ))}
