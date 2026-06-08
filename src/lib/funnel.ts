@@ -5,6 +5,7 @@
 
 import { BRAND } from "./brand";
 import { getUid, openExternal } from "./telegram";
+import { pickLabel, type Lang } from "./i18n";
 
 // API base reader MUST stay this exact form: absolute URL, default "".
 const API_BASE = import.meta.env.VITE_API_BASE || "";
@@ -13,6 +14,9 @@ const API_BASE = import.meta.env.VITE_API_BASE || "";
 // Types — mirror the fixed contract exactly.
 // ---------------------------------------------------------------------------
 export type Category = "all" | "crypto" | "casino" | "esports";
+
+// Some backend fields arrive either as a plain string or a localized object.
+export type Localized = string | { en?: string; ru?: string; es?: string };
 
 export interface AppConfig {
   brand: string;
