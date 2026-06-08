@@ -17,6 +17,7 @@ import { Route as ApiStatsRouteImport } from './routes/api/stats'
 import { Route as ApiNewsRouteImport } from './routes/api/news'
 import { Route as ApiMembershipRouteImport } from './routes/api/membership'
 import { Route as ApiLiveRouteImport } from './routes/api/live'
+import { Route as ApiEventRouteImport } from './routes/api/event'
 import { Route as ApiConfigRouteImport } from './routes/api/config'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -59,6 +60,11 @@ const ApiLiveRoute = ApiLiveRouteImport.update({
   path: '/api/live',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiEventRoute = ApiEventRouteImport.update({
+  id: '/api/event',
+  path: '/api/event',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiConfigRoute = ApiConfigRouteImport.update({
   id: '/api/config',
   path: '/api/config',
@@ -70,6 +76,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/config': typeof ApiConfigRoute
+  '/api/event': typeof ApiEventRoute
   '/api/live': typeof ApiLiveRoute
   '/api/membership': typeof ApiMembershipRoute
   '/api/news': typeof ApiNewsRoute
@@ -81,6 +88,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/config': typeof ApiConfigRoute
+  '/api/event': typeof ApiEventRoute
   '/api/live': typeof ApiLiveRoute
   '/api/membership': typeof ApiMembershipRoute
   '/api/news': typeof ApiNewsRoute
@@ -93,6 +101,7 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/config': typeof ApiConfigRoute
+  '/api/event': typeof ApiEventRoute
   '/api/live': typeof ApiLiveRoute
   '/api/membership': typeof ApiMembershipRoute
   '/api/news': typeof ApiNewsRoute
@@ -106,6 +115,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/sitemap.xml'
     | '/api/config'
+    | '/api/event'
     | '/api/live'
     | '/api/membership'
     | '/api/news'
@@ -117,6 +127,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/sitemap.xml'
     | '/api/config'
+    | '/api/event'
     | '/api/live'
     | '/api/membership'
     | '/api/news'
@@ -128,6 +139,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/sitemap.xml'
     | '/api/config'
+    | '/api/event'
     | '/api/live'
     | '/api/membership'
     | '/api/news'
@@ -140,6 +152,7 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ApiConfigRoute: typeof ApiConfigRoute
+  ApiEventRoute: typeof ApiEventRoute
   ApiLiveRoute: typeof ApiLiveRoute
   ApiMembershipRoute: typeof ApiMembershipRoute
   ApiNewsRoute: typeof ApiNewsRoute
@@ -205,6 +218,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiLiveRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/event': {
+      id: '/api/event'
+      path: '/api/event'
+      fullPath: '/api/event'
+      preLoaderRoute: typeof ApiEventRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/config': {
       id: '/api/config'
       path: '/api/config'
@@ -220,6 +240,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ApiConfigRoute: ApiConfigRoute,
+  ApiEventRoute: ApiEventRoute,
   ApiLiveRoute: ApiLiveRoute,
   ApiMembershipRoute: ApiMembershipRoute,
   ApiNewsRoute: ApiNewsRoute,
