@@ -13,6 +13,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiNewsRouteImport } from './routes/api/news'
+import { Route as ApiLiveRouteImport } from './routes/api/live'
 import { Route as ApiConfigRouteImport } from './routes/api/config'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -35,6 +36,11 @@ const ApiNewsRoute = ApiNewsRouteImport.update({
   path: '/api/news',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiLiveRoute = ApiLiveRouteImport.update({
+  id: '/api/live',
+  path: '/api/live',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiConfigRoute = ApiConfigRouteImport.update({
   id: '/api/config',
   path: '/api/config',
@@ -46,6 +52,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/config': typeof ApiConfigRoute
+  '/api/live': typeof ApiLiveRoute
   '/api/news': typeof ApiNewsRoute
 }
 export interface FileRoutesByTo {
@@ -53,6 +60,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/config': typeof ApiConfigRoute
+  '/api/live': typeof ApiLiveRoute
   '/api/news': typeof ApiNewsRoute
 }
 export interface FileRoutesById {
@@ -61,19 +69,33 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/config': typeof ApiConfigRoute
+  '/api/live': typeof ApiLiveRoute
   '/api/news': typeof ApiNewsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/privacy' | '/sitemap.xml' | '/api/config' | '/api/news'
+  fullPaths:
+    | '/'
+    | '/privacy'
+    | '/sitemap.xml'
+    | '/api/config'
+    | '/api/live'
+    | '/api/news'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/privacy' | '/sitemap.xml' | '/api/config' | '/api/news'
+  to:
+    | '/'
+    | '/privacy'
+    | '/sitemap.xml'
+    | '/api/config'
+    | '/api/live'
+    | '/api/news'
   id:
     | '__root__'
     | '/'
     | '/privacy'
     | '/sitemap.xml'
     | '/api/config'
+    | '/api/live'
     | '/api/news'
   fileRoutesById: FileRoutesById
 }
@@ -82,6 +104,7 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ApiConfigRoute: typeof ApiConfigRoute
+  ApiLiveRoute: typeof ApiLiveRoute
   ApiNewsRoute: typeof ApiNewsRoute
 }
 
@@ -115,6 +138,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiNewsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/live': {
+      id: '/api/live'
+      path: '/api/live'
+      fullPath: '/api/live'
+      preLoaderRoute: typeof ApiLiveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/config': {
       id: '/api/config'
       path: '/api/config'
@@ -130,6 +160,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ApiConfigRoute: ApiConfigRoute,
+  ApiLiveRoute: ApiLiveRoute,
   ApiNewsRoute: ApiNewsRoute,
 }
 export const routeTree = rootRouteImport
