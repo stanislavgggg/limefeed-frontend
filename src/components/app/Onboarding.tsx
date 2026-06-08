@@ -2,6 +2,8 @@ import { useI18n } from "@/lib/i18n";
 import { haptic } from "@/lib/telegram";
 import { LimoAvatar } from "./Mascot";
 import { Disclaimer } from "./Misc";
+import { StageBackdrop } from "./StageBackdrop";
+import stageOnboarding from "@/assets/stage-onboarding.jpg";
 
 export function Onboarding({
   displayName,
@@ -17,6 +19,7 @@ export function Onboarding({
   const { t } = useI18n();
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-background">
+      <StageBackdrop src={stageOnboarding} imgClassName="opacity-30 blur-[3px]" />
       <div className="bg-aurora pointer-events-none absolute inset-0" />
       <div className="relative mx-auto flex min-h-full max-w-[480px] flex-col items-center justify-center gap-4 px-6 py-10 text-center">
         <LimoAvatar className="h-32 w-32" />
