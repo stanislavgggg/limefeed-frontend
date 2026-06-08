@@ -13,6 +13,7 @@ import {
   getMembership,
   openChannel,
   resolveBranding,
+  postEvent,
   type Category,
   type NewsItem,
   type BackendMatch,
@@ -23,11 +24,15 @@ import { FilterRail, type Tab } from "@/components/app/FilterRail";
 import { NewsCard } from "@/components/app/cards/NewsCard";
 import { LiveCard } from "@/components/app/cards/LiveCard";
 import { LockedCard } from "@/components/app/cards/LockedCard";
+import { PinnedMatchCard } from "@/components/app/cards/PinnedMatchCard";
 import { MarketsPanel, MarketStrip } from "@/components/app/MarketsPanel";
 import { SubscribeBar } from "@/components/app/SubscribeBar";
 import { Interstitial } from "@/components/app/Interstitial";
 import { ValueStrip } from "@/components/app/ValueStrip";
 import { Onboarding } from "@/components/app/Onboarding";
+import { ChannelScreen } from "@/components/app/ChannelScreen";
+import { BottomNav, type Section } from "@/components/app/BottomNav";
+import { InView } from "@/components/app/InView";
 import {
   FeedSkeleton,
   EmptyState,
@@ -62,11 +67,14 @@ function Index() {
   const { t, lang } = useI18n();
   const queryClient = useQueryClient();
 
+  const [section, setSection] = useState<Section>("feed");
   const [tab, setTab] = useState<Tab>("hot");
   const [category, setCategory] = useState<Category>("all");
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showInterstitial, setShowInterstitial] = useState(false);
   const [celebrate, setCelebrate] = useState(false);
+  const [newsLockReached, setNewsLockReached] = useState(false);
+  const [liveStickyShown, setLiveStickyShown] = useState(false);
   const openedCount = useRef(0);
   const wasMember = useRef<boolean | null>(null);
 
@@ -175,6 +183,26 @@ function Index() {
 
   const handleOpenChannel = (surface: string) => openChannel(cfg, surface);
 
+  // ---- Live sticky CTA: reveal after dwell time or scroll, once per visit ----
+  useEffect(() => {
+    if (section !== "live" || !gated) return;
+    let done = false;
+    const show = () => {
+      if (done) return;
+      done = true;
+      setLiveStickyShown(true);
+    };
+    const timer = setTimeout(show, 6000);
+    const onScroll = () => {
+      if (window.scrollY > 240) show();
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, [section, gated]);
+
   const onItemOpened = () => {
     openedCount.current += 1;
     if (openedCount.current >= 3) maybeInterstitial();
@@ -196,47 +224,93 @@ function Index() {
     if (subscribe) handleOpenChannel("onboarding");
   };
 
+  const pinnedMatch = liveMatches[0] ?? upcomingMatches[0];
+  const pinnedIsLive = liveMatches.length > 0;
+
   return (
     <div className="relative mx-auto min-h-screen max-w-[480px] pb-28">
-      <Header displayName={branding.displayName} tagline={branding.tagline} />
-      <FilterRail tab={tab} setTab={setTab} category={category} setCategory={setCategory} />
-
-      <main className="space-y-3 px-3 pt-3">
-        {gated && tab !== "markets" && <ValueStrip />}
-
-        {(tab === "hot" || tab === "news") && market && tab === "hot" && (
-          <MarketStrip market={market} />
-        )}
-
-        {updatedAt && (
-          <p className="px-1 text-[11px] font-medium text-muted-foreground">
-            {t("updated")} {relativeTime(updatedAt, lang)}
-          </p>
-        )}
-
-        <TabContent
-          tab={tab}
-          category={category}
-          gated={gated}
-          news={news}
-          newsAll={newsAll}
-          live={live}
-          liveMatches={liveMatches}
-          upcomingMatches={upcomingMatches}
-          market={market}
-          onItemOpened={onItemOpened}
-          onUnlock={() => handleOpenChannel("feed_lock")}
-          onLiveCta={() => handleOpenChannel("live_match")}
+      {section === "channel" ? (
+        <ChannelScreen
+          displayName={branding.displayName}
+          channel={branding.channel}
+          onOpen={() => handleOpenChannel("channel_screen")}
         />
+      ) : (
+        <>
+          <Header displayName={branding.displayName} tagline={branding.tagline} />
+          {section === "feed" && (
+            <FilterRail tab={tab} setTab={setTab} category={category} setCategory={setCategory} />
+          )}
 
-        <Disclaimer className="pt-4" />
-      </main>
+          <main className="space-y-3 px-3 pt-3">
+            {gated && <ValueStrip />}
 
-      <Footer privacyUrl={branding.privacyUrl} />
+            {updatedAt && (
+              <p className="px-1 text-[11px] font-medium text-muted-foreground">
+                {t("updated")} {relativeTime(updatedAt, lang)}
+              </p>
+            )}
 
-      {gated && <SubscribeBar label={ctaLabel} onOpen={() => handleOpenChannel("sticky")} />}
+            {section === "feed" ? (
+              <>
+                {tab === "hot" && market && <MarketStrip market={market} />}
+                <TabContent
+                  tab={tab}
+                  category={category}
+                  gated={gated}
+                  news={news}
+                  newsAll={newsAll}
+                  liveMatches={liveMatches}
+                  market={market}
+                  onItemOpened={onItemOpened}
+                  onUnlock={() => handleOpenChannel("feed_lock")}
+                  onLockReached={() => setNewsLockReached(true)}
+                />
+              </>
+            ) : (
+              <LiveSection
+                live={live}
+                liveMatches={liveMatches}
+                upcomingMatches={upcomingMatches}
+                pinnedMatch={pinnedMatch}
+                pinnedIsLive={pinnedIsLive}
+                onPinnedCta={() => handleOpenChannel("live_pinned")}
+              />
+            )}
 
-      {gated && showInterstitial && (
+            <Disclaimer className="pt-4" />
+          </main>
+
+          <Footer privacyUrl={branding.privacyUrl} />
+        </>
+      )}
+
+      {/* Contextual sticky CTAs (sit above the bottom nav) */}
+      {gated && section === "feed" && newsLockReached && tab !== "markets" && (
+        <SubscribeBar
+          label={ctaLabel}
+          surface="feed_lock_sticky"
+          onOpen={() => handleOpenChannel("feed_lock_sticky")}
+        />
+      )}
+      {gated && section === "live" && liveStickyShown && (
+        <SubscribeBar
+          label={ctaLabel}
+          surface="live_sticky"
+          onOpen={() => handleOpenChannel("live_sticky")}
+        />
+      )}
+
+      <BottomNav
+        section={section}
+        onSelect={(s) => {
+          if (s === "channel") postEvent("cta_tap", { surface: "nav_channel_tab" });
+          setSection(s);
+          if (typeof window !== "undefined") window.scrollTo({ top: 0 });
+        }}
+      />
+
+      {section !== "channel" && gated && showInterstitial && (
         <Interstitial
           label={ctaLabel}
           onOpen={() => {
@@ -272,26 +346,22 @@ function TabContent({
   gated,
   news,
   newsAll,
-  live,
   liveMatches,
-  upcomingMatches,
   market,
   onItemOpened,
   onUnlock,
-  onLiveCta,
+  onLockReached,
 }: {
   tab: Tab;
   category: Category;
   gated: boolean;
   news: Q<import("@/lib/funnel").NewsResponse>;
   newsAll: Q<import("@/lib/funnel").NewsResponse>;
-  live: Q<{ matches: BackendMatch[] }>;
   liveMatches: BackendMatch[];
-  upcomingMatches: BackendMatch[];
   market: import("@/lib/funnel").NewsMarket | undefined;
   onItemOpened: () => void;
   onUnlock: () => void;
-  onLiveCta: () => void;
+  onLockReached: () => void;
 }) {
   const { t } = useI18n();
 
@@ -299,32 +369,6 @@ function TabContent({
     if (newsAll.isLoading && !market) return <FeedSkeleton count={3} />;
     if (!market) return <EmptyState message={t("empty_news")} />;
     return <MarketsPanel market={market} />;
-  }
-
-  if (tab === "live") {
-    if ((live.isLoading) && liveMatches.length === 0 && upcomingMatches.length === 0)
-      return <FeedSkeleton />;
-    if (live.isError && liveMatches.length === 0)
-      return (
-        <ErrorState
-          title={t("error_title")}
-          sub={t("error_sub")}
-          retryLabel={t("retry")}
-          onRetry={() => live.refetch()}
-        />
-      );
-    if (liveMatches.length === 0 && upcomingMatches.length === 0)
-      return <EmptyState message={t("empty_live")} />;
-    return (
-      <div className="space-y-3">
-        {liveMatches.map((m, i) => (
-          <LiveCard key={`l-${m.id ?? i}`} match={m} live index={i} onCta={onLiveCta} />
-        ))}
-        {upcomingMatches.map((m, i) => (
-          <LiveCard key={`u-${m.id ?? i}`} match={m} live={false} index={i} onCta={onLiveCta} />
-        ))}
-      </div>
-    );
   }
 
   // hot + news both render a news feed (hot interleaves live first)
@@ -348,9 +392,68 @@ function TabContent({
     <div className="space-y-3">
       {tab === "hot" &&
         liveMatches.map((m, i) => (
-          <LiveCard key={`hot-l-${m.id ?? i}`} match={m} live index={i} onCta={onLiveCta} />
+          <LiveCard key={`hot-l-${m.id ?? i}`} match={m} live index={i} />
         ))}
-      <GatedNews items={items} gated={gated} onItemOpened={onItemOpened} onUnlock={onUnlock} />
+      <GatedNews
+        items={items}
+        gated={gated}
+        onItemOpened={onItemOpened}
+        onUnlock={onUnlock}
+        onLockReached={onLockReached}
+      />
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Live section: pinned hero match + score cards (no per-card CTA).
+// ---------------------------------------------------------------------------
+function LiveSection({
+  live,
+  liveMatches,
+  upcomingMatches,
+  pinnedMatch,
+  pinnedIsLive,
+  onPinnedCta,
+}: {
+  live: Q<{ matches: BackendMatch[] }>;
+  liveMatches: BackendMatch[];
+  upcomingMatches: BackendMatch[];
+  pinnedMatch: BackendMatch | undefined;
+  pinnedIsLive: boolean;
+  onPinnedCta: () => void;
+}) {
+  const { t } = useI18n();
+
+  if (live.isLoading && liveMatches.length === 0 && upcomingMatches.length === 0)
+    return <FeedSkeleton />;
+  if (live.isError && liveMatches.length === 0)
+    return (
+      <ErrorState
+        title={t("error_title")}
+        sub={t("error_sub")}
+        retryLabel={t("retry")}
+        onRetry={() => live.refetch()}
+      />
+    );
+  if (liveMatches.length === 0 && upcomingMatches.length === 0)
+    return <EmptyState message={t("empty_live")} />;
+
+  // Exclude the pinned match from the regular lists to avoid duplication.
+  const restLive = pinnedIsLive ? liveMatches.slice(1) : liveMatches;
+  const restUpcoming = pinnedIsLive ? upcomingMatches : upcomingMatches.slice(1);
+
+  return (
+    <div className="space-y-3">
+      {pinnedMatch && (
+        <PinnedMatchCard match={pinnedMatch} live={pinnedIsLive} onCta={onPinnedCta} />
+      )}
+      {restLive.map((m, i) => (
+        <LiveCard key={`l-${m.id ?? i}`} match={m} live index={i} />
+      ))}
+      {restUpcoming.map((m, i) => (
+        <LiveCard key={`u-${m.id ?? i}`} match={m} live={false} index={i} />
+      ))}
     </div>
   );
 }
@@ -360,12 +463,15 @@ function GatedNews({
   gated,
   onItemOpened,
   onUnlock,
+  onLockReached,
 }: {
   items: NewsItem[];
   gated: boolean;
   onItemOpened: () => void;
   onUnlock: () => void;
+  onLockReached: () => void;
 }) {
+  const { t } = useI18n();
   if (!gated) {
     return (
       <>
@@ -381,6 +487,17 @@ function GatedNews({
   // Free preview: first 2 items, then interleaved locked cards.
   const free = items.slice(0, 2);
   const locked = items.slice(2, 8);
+  if (locked.length === 0) {
+    return (
+      <>
+        {free.map((item, i) => (
+          <div key={item.id} onClickCapture={onItemOpened}>
+            <NewsCard item={item} index={i} />
+          </div>
+        ))}
+      </>
+    );
+  }
   return (
     <>
       {free.map((item, i) => (
@@ -388,6 +505,11 @@ function GatedNews({
           <NewsCard item={item} index={i} />
         </div>
       ))}
+      <InView onInView={onLockReached} rootMargin="0px 0px -120px 0px" />
+      <p className="flex items-center justify-center gap-1.5 px-1 text-[11px] font-semibold text-muted-foreground">
+        <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-up" />
+        {t("lock_social_proof")}
+      </p>
       {locked.map((item) => (
         <LockedCard key={item.id} teaser={item.title} onUnlock={onUnlock} />
       ))}

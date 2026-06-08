@@ -2,16 +2,15 @@ import { useI18n } from "@/lib/i18n";
 import { haptic } from "@/lib/telegram";
 import type { Category } from "@/lib/funnel";
 
-export type Tab = "hot" | "news" | "live" | "markets";
-export const TABS: Tab[] = ["hot", "news", "live", "markets"];
+export type Tab = "hot" | "news" | "markets";
+export const TABS: Tab[] = ["hot", "news", "markets"];
 
-const TAB_KEY: Record<Tab, "tab_hot" | "tab_news" | "tab_live" | "tab_markets"> = {
+const TAB_KEY: Record<Tab, "tab_hot" | "tab_news" | "tab_markets"> = {
   hot: "tab_hot",
   news: "tab_news",
-  live: "tab_live",
   markets: "tab_markets",
 };
-const TAB_ICON: Record<Tab, string> = { hot: "🔥", news: "📰", live: "🟢", markets: "📈" };
+const TAB_ICON: Record<Tab, string> = { hot: "🔥", news: "📰", markets: "📈" };
 
 const SUBCHIPS: { key: Category; label: "chip_all" | "chip_crypto" | "chip_casino" | "chip_esports" }[] = [
   { key: "all", label: "chip_all" },
