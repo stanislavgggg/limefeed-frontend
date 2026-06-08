@@ -109,7 +109,7 @@ function Index() {
   });
 
   const cfg = config.data;
-  const branding = resolveBranding(cfg);
+  const branding = resolveBranding(cfg, lang);
   const ctaLabel = pickLabel(cfg?.cta.label, lang, t("subscribe"));
 
   // ---- Gating logic (client-side presentation only) ----
